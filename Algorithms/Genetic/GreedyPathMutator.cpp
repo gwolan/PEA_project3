@@ -1,16 +1,16 @@
 #include <algorithm>
 #include <numeric>
-#include <Algorithms/Genetic/GreedyGenerationCreator.hpp>
+#include <Algorithms/Genetic/GreedyPathMutator.hpp>
 #include <Graph/GraphMatrix.hpp>
 #include <Miscellanous/Dice.hpp>
 
 
-GreedyGenerationCreator::GreedyGenerationCreator()
+GreedyPathMutator::GreedyPathMutator()
     : INFINITE_VALUE(-1)
     , randomMutationPrefixLength(3)
 { }
 
-std::vector<uint32_t> GreedyGenerationCreator::createGenerationGreedyStyle(std::unique_ptr<GraphMatrix>& graphMatrix)
+std::vector<uint32_t> GreedyPathMutator::createPathMutationGreedyStyle(std::unique_ptr<GraphMatrix>& graphMatrix)
 {
     // when creating a generation - random mutation is involved to mutate first veticies
     std::vector<uint32_t> startingPath;
@@ -53,7 +53,7 @@ std::vector<uint32_t> GreedyGenerationCreator::createGenerationGreedyStyle(std::
     return startingPath;
 }
 
-void GreedyGenerationCreator::generatePathBeginning(std::unique_ptr<GraphMatrix>& graphMatrix, std::vector<uint32_t>& path)
+void GreedyPathMutator::generatePathBeginning(std::unique_ptr<GraphMatrix>& graphMatrix, std::vector<uint32_t>& path)
 {
     // choose starting vertex randomly
     Dice dice(0, graphMatrix->getVertexCount() - 1);
@@ -73,12 +73,12 @@ void GreedyGenerationCreator::generatePathBeginning(std::unique_ptr<GraphMatrix>
 }
 
 template<class Iterator>
-bool GreedyGenerationCreator::wasVertexAlreadyChecked(Iterator begin, Iterator end, const uint32_t vertex)
+bool GreedyPathMutator::wasVertexAlreadyChecked(Iterator begin, Iterator end, const uint32_t vertex)
 {
     return std::find(begin, end, vertex) != end;
 }
 
-bool GreedyGenerationCreator::isGivenEdgePromising(const uint32_t edgeWeight, const uint32_t upperBound)
+bool GreedyPathMutator::isGivenEdgePromising(const uint32_t edgeWeight, const uint32_t upperBound)
 {
     return (upperBound == INFINITE_VALUE) || (edgeWeight < upperBound);
 }

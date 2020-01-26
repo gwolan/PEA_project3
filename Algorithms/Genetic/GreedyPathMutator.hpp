@@ -7,13 +7,13 @@
 
 class GraphMatrix;
 
-class GreedyGenerationCreator
+class GreedyPathMutator
 {
     public:
-    GreedyGenerationCreator();
-    ~GreedyGenerationCreator() = default;
+    GreedyPathMutator();
+    ~GreedyPathMutator() = default;
 
-    std::vector<uint32_t> createGenerationGreedyStyle(std::unique_ptr<GraphMatrix>& graphMatrix);
+    std::vector<uint32_t> createPathMutationGreedyStyle(std::unique_ptr<GraphMatrix>& graphMatrix);
 
 
     private:
