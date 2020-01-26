@@ -18,7 +18,7 @@ bool ApplicationFacade::readMenuSelection()
     return ioHandler.readMenuSelection();
 }
 
-char ApplicationFacade::getCurrentMenuSelection()
+std::string ApplicationFacade::getCurrentMenuSelection()
 {
     return ioHandler.getCurrentMenuSelection();
 }

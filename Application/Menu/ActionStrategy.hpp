@@ -12,7 +12,7 @@ class ActionStrategy
     ActionStrategy(std::unique_ptr<GraphMatrix>& graphMatrix, TabuConfiguration& tabuConfig);
 
     void executeAction();
-    bool selectAction(char selection);
+    bool selectAction(std::string choice);
 
 
     public:

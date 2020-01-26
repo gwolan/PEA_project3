@@ -18,7 +18,7 @@ class ModifyTabuConfiguration : public BaseAction
 
 
     private:
-    bool handleMenuSelection(char selection);
+    bool handleMenuSelection(std::string choice);
     void drawSubMenu();
     void setDiversification();
     void setDiversificationCriteria();

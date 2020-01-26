@@ -18,7 +18,7 @@ void ModifyTabuConfiguration::run()
 {
     IOhandler ioHandler(subMenuContent);
 
-    while(ioHandler.getCurrentMenuSelection() != '0')
+    while(ioHandler.getCurrentMenuSelection() != "0")
     {
         drawSubMenu();
         ioHandler.setMenuContent(subMenuContent);
@@ -29,37 +29,39 @@ void ModifyTabuConfiguration::run()
     }
 }
 
-bool ModifyTabuConfiguration::handleMenuSelection(char selection)
+bool ModifyTabuConfiguration::handleMenuSelection(std::string choice)
 {
     std::cout << std::endl;
 
+    uint32_t selection = std::atoi(choice.c_str());
+
     switch(selection)
     {
-        case '1':
+        case 1:
         {
             setDiversification();
         }
         break;
 
-        case '2':
+        case 2:
         {
             setDiversificationCriteria();
         }
         break;
 
-        case '3':
+        case 3:
         {
             setCadency();
         }
         break;
 
-        case '4':
+        case 4:
         {
             setTabuInterval();
         }
         break;
 
-        case '0': break;
+        case 0: break;
 
         default:
         {

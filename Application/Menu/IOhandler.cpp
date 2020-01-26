@@ -3,7 +3,7 @@
 
 
 IOhandler::IOhandler(const std::string& menuContent)
-    : currentSelection(0)
+    : currentSelection()
     , menu(menuContent)
 { }
 
@@ -12,7 +12,7 @@ void IOhandler::printMenu()
     std::cout << menu;
 }
 
-char IOhandler::getCurrentMenuSelection()
+std::string IOhandler::getCurrentMenuSelection()
 {
     return currentSelection;
 }

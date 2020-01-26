@@ -17,7 +17,7 @@ class ApplicationFacade
     void run();
     void printMenu();
     bool readMenuSelection();
-    char getCurrentMenuSelection();
+    std::string getCurrentMenuSelection();
 
 
     private:
