@@ -37,10 +37,11 @@ Genetic::PathWithCost Genetic::findBestPossibleRoute(std::unique_ptr<GraphMatrix
 
     do
     {
-        std::sort(population.begin(), population.end(), PathComparator());
+        std::vector<PathWithCost> newGeneration;
+        breedCurrentPopulation(newGeneration);
+
+        cutOffWeakPopulationMembers();
         assignNewBestSolutionIfPossible(population.front());
-
-
     }
     while(!isTimeUp());
 
@@ -60,12 +61,71 @@ void Genetic::generateStartingPopulation()
     }
 }
 
+void Genetic::cutOffWeakPopulationMembers()
+{
+    std::sort(population.begin(), population.end(), PathComparator());
+    population.resize(geneticConfiguration.getPopulationSize());
+}
+
+bool Genetic::shouldCrossoverHappen()
+{
+    Dice dice(1, 99);
+
+    double rolledCrossoverVariable = static_cast<double>(dice.roll()) / 100.0;
+
+    if(rolledCrossoverVariable < geneticConfiguration.getCrossoverCoefficient())
+    {
+        return true;
+    }
+
+    return false;
+}
+
+bool Genetic::shouldMutationHappen()
+{
+    Dice dice(1, 99);
+
+    double rolledMutationVariable = static_cast<double>(dice.roll()) / 100.0;
+
+    if(rolledMutationVariable < geneticConfiguration.getMutationCoefficient())
+    {
+        return true;
+    }
+
+    return false;
+}
+
 void Genetic::assignNewBestSolutionIfPossible(Genetic::PathWithCost& bestPath)
 {
     if(isGivenPathPromising(bestPath.first, bestSolution.first))
     {
         bestSolution.first = bestPath.first;
         bestSolution.second = bestPath.second;
+    }
+}
+
+void Genetic::breedCurrentPopulation(std::vector<Genetic::PathWithCost>& newGeneration)
+{
+    for(auto firstParent = population.begin(); firstParent != population.end(); ++firstParent)
+    {
+        if(shouldCrossoverHappen())
+        {
+            for(auto secondParent = population.begin(); secondParent != population.end(); ++secondParent)
+            {
+                if(firstParent == secondParent)
+                {
+                    continue;
+                }
+
+                if(shouldCrossoverHappen())
+                {
+                    std::pair<PathWithCost, PathWithCost> siblings = generateSiblings(firstParent->second, secondParent->second);
+
+                    newGeneration.push_back(siblings.first);
+                    newGeneration.push_back(siblings.second);
+                }
+            }
+        }
     }
 }
 
