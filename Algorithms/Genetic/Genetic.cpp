@@ -2,6 +2,7 @@
 #include <Algorithms/Genetic/Genetic.hpp>
 #include <Graph/GraphMatrix.hpp>
 #include <Miscellanous/Dice.hpp>
+#include <Algorithms/Genetic/Utils/PathComparator.hpp>
 
 
 Genetic::Genetic(const GeneticConfiguration& geneticConfig)
@@ -31,7 +32,16 @@ Genetic::PathWithCost Genetic::findBestPossibleRoute(std::unique_ptr<GraphMatrix
     timer.start();
     generateStartingPopulation();
 
-    return PathWithCost();
+    do
+    {
+        std::sort(population.begin(), population.end(), PathComparator());
+        assignNewBestSolutionIfPossible(population.front());
+
+
+    }
+    while(isTimeUp());
+
+    return bestSolution;
 }
 
 void Genetic::generateStartingPopulation()
@@ -47,7 +57,16 @@ void Genetic::generateStartingPopulation()
     }
 }
 
-std::pair<std::vector<uint32_t>, std::vector<uint32_t>> Genetic::generateSiblings(std::vector<uint32_t>& firstParent,
+void Genetic::assignNewBestSolutionIfPossible(Genetic::PathWithCost& bestPath)
+{
+    if(isGivenPathPromising(bestPath.first, bestSolution.first))
+    {
+        bestSolution.first = bestPath.first;
+        bestSolution.second = bestPath.second;
+    }
+}
+
+std::pair<Genetic::PathWithCost, Genetic::PathWithCost> Genetic::generateSiblings(std::vector<uint32_t>& firstParent,
                                                                                   std::vector<uint32_t>& secondParent)
 {
     // allocate space for siblings (siblings = paths after OX crossover)
@@ -78,7 +97,7 @@ std::pair<std::vector<uint32_t>, std::vector<uint32_t>> Genetic::generateSibling
     fillRestOfTheSiblingPathDuringOX(secondParentIterators, firstSiblingIterators, secondParent, siblings.first);
     fillRestOfTheSiblingPathDuringOX(firstParentIterators, secondSiblingIterators, firstParent, siblings.second);
 
-    return siblings;
+    return convertSiblingsToResult(siblings);
 }
 
 void Genetic::fillRestOfTheSiblingPathDuringOX(std::pair<std::vector<uint32_t>::iterator, std::vector<uint32_t>::iterator>& parentIterators,
@@ -144,6 +163,19 @@ std::pair<std::vector<uint32_t>::iterator,
                      std::vector<uint32_t>::iterator>(pathBegin, pathEnd);
 }
 
+std::pair<Genetic::PathWithCost, Genetic::PathWithCost> Genetic::convertSiblingsToResult(std::pair<std::vector<uint32_t>, std::vector<uint32_t>>& siblings)
+{
+    PathWithCost firstSibling;
+    PathWithCost secondSibling;
+
+    firstSibling.first = calculatePathsCost(siblings.first);
+    firstSibling.second = siblings.first;
+    secondSibling.first = calculatePathsCost(siblings.second);
+    secondSibling.second = siblings.second;
+
+    return std::pair<PathWithCost, PathWithCost>(firstSibling, secondSibling);
+}
+
 bool Genetic::isTimeUp()
 {
     timer.stop();
@@ -173,4 +205,9 @@ template<class Iterator>
 bool Genetic::wasVertexAlreadyChecked(Iterator begin, Iterator end, const uint32_t vertex)
 {
     return std::find(begin, end, vertex) != end;
+}
+
+bool Genetic::isGivenPathPromising(const uint32_t currentCost, const uint32_t upperBound)
+{
+    return (upperBound == INFINITY) || (currentCost < upperBound);
 }
