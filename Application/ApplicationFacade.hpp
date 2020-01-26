@@ -6,6 +6,7 @@
 #include <Application/Menu/IOhandler.hpp>
 #include <Application/Menu/ActionStrategy.hpp>
 #include <Algorithms/TabuSearch/Utils/TabuConfiguration.hpp>
+#include <Algorithms/Genetic/Utils/GeneticConfiguration.hpp>
 
 
 class ApplicationFacade
@@ -24,5 +25,6 @@ class ApplicationFacade
     std::unique_ptr<GraphMatrix> graph;
     IOhandler ioHandler;
     TabuConfiguration tabuConfiguration;
+    GeneticConfiguration geneticConfiguration;
     ActionStrategy actionStrategy;
 };

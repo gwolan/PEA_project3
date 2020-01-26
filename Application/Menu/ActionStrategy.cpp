@@ -9,13 +9,15 @@
 #include <Application/Menu/Actions/PerformBruteForce.hpp>
 #include <Application/Menu/Actions/PerformBranchAndBound.hpp>
 #include <Application/Menu/Actions/ModifyTabuConfiguration.hpp>
+#include <Application/Menu/Actions/ModifyGeneticConfiguration.hpp>
 #include <Application/Menu/Actions/PerformTabuSearch.hpp>
 
 
-ActionStrategy::ActionStrategy(std::unique_ptr<GraphMatrix>& graphMatrix, TabuConfiguration& tabuConfig)
+ActionStrategy::ActionStrategy(std::unique_ptr<GraphMatrix>& graphMatrix, TabuConfiguration& tabuConfig, GeneticConfiguration& geneticConfig)
     : graph(graphMatrix)
     , selectedAction(nullptr)
     , tabuConfiguration(tabuConfig)
+    , geneticConfiguration(geneticConfig)
 { }
 
 void ActionStrategy::executeAction()
@@ -81,6 +83,7 @@ bool ActionStrategy::selectAction(std::string choice)
         break;
         case 10:
         {
+            selectedAction = std::make_unique<ModifyGeneticConfiguration>("Konfiguracja algorytmu genetycznego", geneticConfiguration);
         }
         break;
         case 11:
