@@ -11,6 +11,7 @@
 #include <Application/Menu/Actions/ModifyTabuConfiguration.hpp>
 #include <Application/Menu/Actions/ModifyGeneticConfiguration.hpp>
 #include <Application/Menu/Actions/PerformTabuSearch.hpp>
+#include <Application/Menu/Actions/PerformGeneticAlgorithm.hpp>
 
 
 ActionStrategy::ActionStrategy(std::unique_ptr<GraphMatrix>& graphMatrix, TabuConfiguration& tabuConfig, GeneticConfiguration& geneticConfig)
@@ -74,6 +75,7 @@ bool ActionStrategy::selectAction(std::string choice)
         break;
         case 8:
         {
+            selectedAction = std::make_unique<PerformGeneticAlgorithm>("Znalezienie optymalnej sciezki algorytmem genetycznym", geneticConfiguration);
         }
         break;
         case 9:

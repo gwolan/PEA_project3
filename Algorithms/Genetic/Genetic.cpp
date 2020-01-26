@@ -23,10 +23,13 @@ void Genetic::reset()
     bestSolution.second.clear();
 
     population.clear();
+
+    graph = nullptr;
 }
 
 Genetic::PathWithCost Genetic::findBestPossibleRoute(std::unique_ptr<GraphMatrix>& graphMatrix)
 {
+    reset();
     graph = &graphMatrix;
 
     timer.start();
@@ -39,7 +42,7 @@ Genetic::PathWithCost Genetic::findBestPossibleRoute(std::unique_ptr<GraphMatrix
 
 
     }
-    while(isTimeUp());
+    while(!isTimeUp());
 
     return bestSolution;
 }
