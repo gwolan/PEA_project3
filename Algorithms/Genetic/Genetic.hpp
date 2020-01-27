@@ -27,6 +27,10 @@ class Genetic
 
     // algorithm
     void breedCurrentPopulation(std::vector<PathWithCost>& newGeneration);
+    void mutateNewGeneration(std::vector<PathWithCost>& newGeneration);
+    void inversionMutation(std::vector<PathWithCost>& newGeneration);
+    void scrambleMutation(std::vector<PathWithCost>& newGeneration);
+    void addNewGenerationToCurrentPopulation(std::vector<PathWithCost>& newGeneration);
     void generateStartingPopulation();
     void cutOffWeakPopulationMembers();
     bool shouldCrossoverHappen();
@@ -37,7 +41,7 @@ class Genetic
                                           std::pair<std::vector<uint32_t>::iterator, std::vector<uint32_t>::iterator>& siblingIterators,
                                           std::vector<uint32_t>& parent,
                                           std::vector<uint32_t>& sibling);
-    std::pair<uint32_t, uint32_t> rollRange();
+    std::pair<uint32_t, uint32_t> rollRange(uint32_t lowerBound, uint32_t upperBound);
     std::pair<std::vector<uint32_t>::iterator,
               std::vector<uint32_t>::iterator> convertIndexesToIterators(std::vector<uint32_t>& path, uint32_t beginIndex,
                                                                                                       uint32_t endIndex);

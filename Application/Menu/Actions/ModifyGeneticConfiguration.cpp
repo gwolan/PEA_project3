@@ -39,7 +39,7 @@ bool ModifyGeneticConfiguration::handleMenuSelection(std::string choice)
     {
         case 1:
         {
-            setEdgeMutation();
+            setInversionMutation();
         }
         break;
 
@@ -78,15 +78,15 @@ bool ModifyGeneticConfiguration::handleMenuSelection(std::string choice)
     std::cout << std::endl;
 }
 
-void ModifyGeneticConfiguration::setEdgeMutation()
+void ModifyGeneticConfiguration::setInversionMutation()
 {
-    if(geneticConfiguration.isEdgeMutationEnabled())
+    if(geneticConfiguration.isInversionMutationEnabled())
     {
-        geneticConfiguration.disableEdgeMutation();
+        geneticConfiguration.disableInversionMutation();
     }
     else
     {
-        geneticConfiguration.enableEdgeMutation();
+        geneticConfiguration.enableInversionMutation();
     }
 }
 
@@ -133,7 +133,7 @@ void ModifyGeneticConfiguration::setGeneticInterval()
 void ModifyGeneticConfiguration::drawSubMenu()
 {
     std::string title(           "Menu konfiguracyjne algorytmu genetycznego:\n");
-    std::string optionOne(       "1. Zmien mutacje: " + std::string(geneticConfiguration.isEdgeMutationEnabled() ? "Zamiana krawedzi\n" : "Zamiana wierzcholkow\n"));
+    std::string optionOne(       "1. Zmien mutacje: " + std::string(geneticConfiguration.isInversionMutationEnabled() ? "Inversion Mutation\n" : "Scramble Mutation\n"));
     std::string optionTwo(       "2. Ustaw wspolczynnik mutacji: " + std::to_string(geneticConfiguration.getMutationCoefficient()) + " \n");
     std::string optionThree(     "3. Ustaw wspolczynnik krzyzowania: " + std::to_string(geneticConfiguration.getCrossoverCoefficient()) + std::string("\n"));
     std::string optionFour(      "4. Ustaw wielkosc populacji: " + std::to_string(geneticConfiguration.getPopulationSize()) + std::string("\n"));

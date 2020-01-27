@@ -20,7 +20,7 @@ class ModifyGeneticConfiguration : public BaseAction
     private:
     bool handleMenuSelection(std::string choice);
     void drawSubMenu();
-    void setEdgeMutation();
+    void setInversionMutation();
     void setMutationCoefficient();
     void setCrossoverCoefficient();
     void setPopulationSize();

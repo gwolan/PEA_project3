@@ -39,6 +39,8 @@ Genetic::PathWithCost Genetic::findBestPossibleRoute(std::unique_ptr<GraphMatrix
     {
         std::vector<PathWithCost> newGeneration;
         breedCurrentPopulation(newGeneration);
+        mutateNewGeneration(newGeneration);
+        addNewGenerationToCurrentPopulation(newGeneration);
 
         cutOffWeakPopulationMembers();
         assignNewBestSolutionIfPossible(population.front());
@@ -129,6 +131,64 @@ void Genetic::breedCurrentPopulation(std::vector<Genetic::PathWithCost>& newGene
     }
 }
 
+void Genetic::mutateNewGeneration(std::vector<Genetic::PathWithCost>& newGeneration)
+{
+    if(geneticConfiguration.isInversionMutationEnabled())
+    {
+        inversionMutation(newGeneration);
+    }
+    else
+    {
+        scrambleMutation(newGeneration);
+    }
+}
+
+void Genetic::inversionMutation(std::vector<Genetic::PathWithCost>& newGeneration)
+{
+    for(auto newPath = newGeneration.begin(); newPath != newGeneration.end(); ++newPath)
+    {
+        if(shouldMutationHappen())
+        {
+            auto indexes = rollRange(1, (*graph)->getVertexCount() - 1);
+            auto interators = convertIndexesToIterators(newPath->second, indexes.first, indexes.second);
+
+            auto begin = interators.first;
+            auto end = interators.second;
+
+            do
+            {
+                auto vertexA = begin;
+                auto vertexB = end;
+
+                std::iter_swap(vertexA, vertexB);
+
+                begin++;
+                end++;
+            }
+            while(begin < end);
+        }
+    }
+}
+
+void Genetic::scrambleMutation(std::vector<Genetic::PathWithCost>& newGeneration)
+{
+    for(auto newPath = newGeneration.begin(); newPath != newGeneration.end(); ++newPath)
+    {
+        if(shouldMutationHappen())
+        {
+            auto indexes = rollRange(1, (*graph)->getVertexCount() - 1);
+            auto interators = convertIndexesToIterators(newPath->second, indexes.first, indexes.second);
+
+            std::iter_swap(interators.first, interators.second);
+        }
+    }
+}
+
+void Genetic::addNewGenerationToCurrentPopulation(std::vector<Genetic::PathWithCost>& newGeneration)
+{
+    population.insert(population.end(), newGeneration.begin(), newGeneration.end());
+}
+
 std::pair<Genetic::PathWithCost, Genetic::PathWithCost> Genetic::generateSiblings(std::vector<uint32_t>& firstParent,
                                                                                   std::vector<uint32_t>& secondParent)
 {
@@ -138,7 +198,7 @@ std::pair<Genetic::PathWithCost, Genetic::PathWithCost> Genetic::generateSibling
     siblings.second.resize(secondParent.size());
 
     // roll random range for siblings to inherit
-    std::pair<uint32_t, uint32_t> range = rollRange();
+    std::pair<uint32_t, uint32_t> range = rollRange(0, (*graph)->getVertexCount() - 1);
 
     // prepare iterators for OX crossover
     std::pair<std::vector<uint32_t>::iterator,
@@ -200,9 +260,9 @@ void Genetic::fillRestOfTheSiblingPathDuringOX(std::pair<std::vector<uint32_t>::
     sibling.back() = sibling.front();
 }
 
-std::pair<uint32_t, uint32_t> Genetic::rollRange()
+std::pair<uint32_t, uint32_t> Genetic::rollRange(uint32_t lowerBound, uint32_t upperBound)
 {
-    Dice dice(0, (*graph)->getVertexCount() - 1);
+    Dice dice(lowerBound, upperBound);
     uint32_t beginVertex = 0;
     uint32_t endVertex = 0;
 

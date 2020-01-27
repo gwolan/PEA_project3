@@ -10,13 +10,13 @@ class GeneticConfiguration
     ~GeneticConfiguration() = default;
 
     void setGeneticInterval(double intervalInSeconds);
-    void enableEdgeMutation();
-    void disableEdgeMutation();
+    void enableInversionMutation();
+    void disableInversionMutation();
     void setMutationCoefficient(double mutationCoeff);
     void setCrossoverCoefficient(double crossoverCoeff);
     void setPopulationSize(uint32_t population);
 
-    bool isEdgeMutationEnabled() const;
+    bool isInversionMutationEnabled() const;
     double getGeneticInterval() const;
     double getMutationCoefficient() const;
     double getCrossoverCoefficient() const;
@@ -24,7 +24,7 @@ class GeneticConfiguration
 
 
     private:
-    bool mutateEdges;
+    bool inversionMutation;
     double mutationCoefficient;
     double crossoverCoefficient;
     double geneticInterval;

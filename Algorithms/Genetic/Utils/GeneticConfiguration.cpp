@@ -3,7 +3,7 @@
 
 // default values for genetic algorithm
 GeneticConfiguration::GeneticConfiguration()
-    : mutateEdges(true)
+    : inversionMutation(true)
     , mutationCoefficient(0.01)
     , crossoverCoefficient(0.8)
     , geneticInterval(15.0)
@@ -15,14 +15,14 @@ void GeneticConfiguration::setGeneticInterval(double intervalInSeconds)
     geneticInterval = intervalInSeconds;
 }
 
-void GeneticConfiguration::enableEdgeMutation()
+void GeneticConfiguration::enableInversionMutation()
 {
-    mutateEdges = true;
+    inversionMutation = true;
 }
 
-void GeneticConfiguration::disableEdgeMutation()
+void GeneticConfiguration::disableInversionMutation()
 {
-    mutateEdges = false;
+    inversionMutation = false;
 }
 
 void GeneticConfiguration::setMutationCoefficient(double mutationCoeff)
@@ -40,9 +40,9 @@ void GeneticConfiguration::setPopulationSize(uint32_t population)
     populationSize = population;
 }
 
-bool GeneticConfiguration::isEdgeMutationEnabled() const
+bool GeneticConfiguration::isInversionMutationEnabled() const
 {
-    return mutateEdges;
+    return inversionMutation;
 }
 
 double GeneticConfiguration::getGeneticInterval() const
