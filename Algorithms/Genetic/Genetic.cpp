@@ -171,22 +171,22 @@ void Genetic::fillRestOfTheSiblingPathDuringOX(std::pair<std::vector<uint32_t>::
     std::vector<uint32_t>::iterator parentIt = std::next(parentIterators.second);
     std::vector<uint32_t>::iterator siblingIt = std::next(siblingIterators.second);
 
-    // cycle through both paths (parent and sibling)
+    // cycle through both paths (parent and sibling) excluding ending vertex
     // cycle around sibling path until you reach beginning of inherited range
     do
     {
-        if(parentIt == parent.end())
+        if(parentIt == std::prev(parent.end()))
         {
             parentIt = parent.begin();
         }
 
-        if(siblingIt == sibling.end())
+        if(siblingIt == std::prev(sibling.end()))
         {
             siblingIt = sibling.begin();
         }
 
-        // assign parents vertex to empty space in siblings path given vertex is not on the path
-        if(!wasVertexAlreadyChecked(sibling.begin(), sibling.end(), *parentIt))
+        // assign parents vertex to empty space in siblings path if given vertex is not already on the path
+        if(!wasVertexAlreadyChecked(siblingIterators.first, std::next(siblingIterators.second), *parentIt))
         {
             *siblingIt = *parentIt;
             ++siblingIt;
@@ -195,6 +195,9 @@ void Genetic::fillRestOfTheSiblingPathDuringOX(std::pair<std::vector<uint32_t>::
         ++parentIt;
     }
     while(siblingIt != siblingIterators.first);
+
+    // close cycle
+    sibling.back() = sibling.front();
 }
 
 std::pair<uint32_t, uint32_t> Genetic::rollRange()
