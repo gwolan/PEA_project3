@@ -38,11 +38,21 @@ Genetic::PathWithCost Genetic::findBestPossibleRoute(std::unique_ptr<GraphMatrix
     do
     {
         std::vector<PathWithCost> newGeneration;
+
+        // generate new paths using OX crossover
         breedCurrentPopulation(newGeneration);
+
+        // mutate new paths using scramble or inversion mutation
         mutateNewGeneration(newGeneration);
+
+        // merge current population with new generation
         addNewGenerationToCurrentPopulation(newGeneration);
 
+        // sort path population placing shortest paths above the longest
+        // resize population and throw away too long paths
         cutOffWeakPopulationMembers();
+
+        // try to assing new optimal solution
         assignNewBestSolutionIfPossible(population.front());
     }
     while(!isTimeUp());
@@ -121,6 +131,7 @@ void Genetic::breedCurrentPopulation(std::vector<Genetic::PathWithCost>& newGene
 
                 if(shouldCrossoverHappen())
                 {
+                    // use OX crossover to create siblings
                     std::pair<PathWithCost, PathWithCost> siblings = generateSiblings(firstParent->second, secondParent->second);
 
                     newGeneration.push_back(siblings.first);
@@ -149,6 +160,7 @@ void Genetic::inversionMutation(std::vector<Genetic::PathWithCost>& newGeneratio
     {
         if(shouldMutationHappen())
         {
+            // choose random range and invert verticies
             auto indexes = rollRange(1, (*graph)->getVertexCount() - 1);
             auto interators = convertIndexesToIterators(newPath->second, indexes.first, indexes.second);
 
@@ -176,6 +188,7 @@ void Genetic::scrambleMutation(std::vector<Genetic::PathWithCost>& newGeneration
     {
         if(shouldMutationHappen())
         {
+            // choose two random verticies and swap them
             auto indexes = rollRange(1, (*graph)->getVertexCount() - 1);
             auto interators = convertIndexesToIterators(newPath->second, indexes.first, indexes.second);
 
@@ -235,11 +248,13 @@ void Genetic::fillRestOfTheSiblingPathDuringOX(std::pair<std::vector<uint32_t>::
     // cycle around sibling path until you reach beginning of inherited range
     do
     {
+        // cycle around from the end to beginning
         if(parentIt == std::prev(parent.end()))
         {
             parentIt = parent.begin();
         }
 
+        // cycle around from the end to beginning
         if(siblingIt == std::prev(sibling.end()))
         {
             siblingIt = sibling.begin();
@@ -256,7 +271,7 @@ void Genetic::fillRestOfTheSiblingPathDuringOX(std::pair<std::vector<uint32_t>::
     }
     while(siblingIt != siblingIterators.first);
 
-    // close cycle
+    // close Hamilton cycle
     sibling.back() = sibling.front();
 }
 
