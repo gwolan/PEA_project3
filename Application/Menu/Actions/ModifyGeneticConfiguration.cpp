@@ -123,7 +123,7 @@ void ModifyGeneticConfiguration::setReproductionCoefficient()
     std::cout << "Podaj % najlepszych osobnikow do rozmnozenia: ";
     std::cin >> reporoductionCoefficient;
 
-    geneticConfiguration.setCrossoverCoefficient(reporoductionCoefficient);
+    geneticConfiguration.setCrossoverCoefficient(reporoductionCoefficient / 100.0);
 }
 
 void ModifyGeneticConfiguration::setPopulationSize()

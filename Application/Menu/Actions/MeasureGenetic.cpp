@@ -11,13 +11,13 @@ MeasureGenetic::MeasureGenetic(const std::string& actionName)
     , graph(nullptr)
     , geneticConfiguration()
     , genetic(geneticConfiguration)
-    , intervals({0.1, 0.2, 0.5})
+    , intervals({3, 6, 9, 12})
     , populationSizes({25, 50, 100})
     , crossoverCoefficientForTest(0.8)
     , mutationCoefficientsForTest({0.02, 0.05, 0.1})
     , mutationCoefficientForTest(0.01)
     , crossoverCoefficientsForTest({0.5, 0.7, 0.9})
-    , numberOfMeasurements(3)
+    , numberOfMeasurements(5)
     , INFINITY(-1)
     , problemOptimalResult(0)
     , bestPopulationSolution(0, INFINITY)
@@ -214,7 +214,7 @@ double MeasureGenetic::calculateRelativeError(uint32_t pathCost)
 
 void MeasureGenetic::saveResultsToFile()
 {
-    resultsFile << "Czas" << "\t" << "Blad" << "\t" << "Koszt" << "\t" << "Populacja" << "\t" << "Inversion" << "\t" << "Krzyzowanie" << "\t" << "Mutacja" << std::endl;
+    resultsFile << "Czas" << "\t" << "Blad" << "\t" << "Koszt" << "\t" << "Popul." << "\t" << "Invert" << "\t" << "Krzyz." << "\t" << "Mutacja" << std::endl;
 
     for(auto result : results)
     {
