@@ -186,7 +186,7 @@ void Genetic::inversionMutation(std::vector<Genetic::PathWithCost>& newGeneratio
                 std::iter_swap(vertexA, vertexB);
 
                 begin++;
-                end++;
+                end--;
             }
             while(begin < end);
         }
