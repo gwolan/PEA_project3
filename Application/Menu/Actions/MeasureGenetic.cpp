@@ -113,76 +113,70 @@ void MeasureGenetic::performMeasurementsForBestPopulation(bool useInversionMutat
     std::cout << "Rozpoczecie pomiarow dla najlepszej populacji algorytmu genetycznego " << (useInversionMutation ? "z Inversion Mutation." : 
                                                                                                                     "ze Scramble Mutation.") << std::endl;
 
-    for(auto interval = intervals.begin(); interval != intervals.end(); ++interval)
+    for(auto crossoverCoefficient : crossoverCoefficientsForTest)
     {
-        for(auto crossoverCoefficient : crossoverCoefficientsForTest)
+        int32_t lowestCost = INFINITY;
+        double lowestCostRelativeError = 0.0;
+
+        setGeneticConfig(useInversionMutation, mutationCoefficientForTest,
+                                               crossoverCoefficient,
+                                               geneticConfiguration.getReproductionCoefficient(), intervals.back(), bestPopulationSolution.first);
+
+        for(uint32_t counter = 0; counter < numberOfMeasurements; ++counter)
         {
-            int32_t lowestCost = INFINITY;
-            double lowestCostRelativeError = 0.0;
+            std::cout << "Pomiar ze stala mutacji " << mutationCoefficientForTest << " dla " << bestPopulationSolution.first << " osobnikow, wartosc krzyzowania " << crossoverCoefficient << ", czas " << static_cast<uint32_t>(intervals.back()) << "s (" << counter + 1 << " z " << numberOfMeasurements << ")..." << std::endl;
+            PathWithCost path = genetic.findBestPossibleRoute(*graph);
 
-            setGeneticConfig(useInversionMutation, mutationCoefficientForTest,
-                                                   crossoverCoefficient,
-                                                   geneticConfiguration.getReproductionCoefficient(), *interval, bestPopulationSolution.first);
-
-            for(uint32_t counter = 0; counter < numberOfMeasurements; ++counter)
+            if(isGivenPathPromising(path.first, lowestCost))
             {
-                std::cout << "Pomiar ze stala mutacji " << mutationCoefficientForTest << " dla " << bestPopulationSolution.first << " osobnikow, wartosc krzyzowania " << crossoverCoefficient << ", czas " << static_cast<uint32_t>(*interval) << "s (" << counter + 1 << " z " << numberOfMeasurements << ")..." << std::endl;
-                PathWithCost path = genetic.findBestPossibleRoute(*graph);
-
-                if(isGivenPathPromising(path.first, lowestCost))
-                {
-                    lowestCost = path.first;
-                    lowestCostRelativeError = calculateRelativeError(path.first);
-                }
+                lowestCost = path.first;
+                lowestCostRelativeError = calculateRelativeError(path.first);
             }
-
-            GeneticMeasureResult result;
-            result.inversionMutation = geneticConfiguration.isInversionMutationEnabled();
-            result.constantMutation = true;
-            result.timeInSeconds = *interval;
-            result.relativeError = lowestCostRelativeError;
-            result.pathCost = lowestCost;
-            result.populationSize = bestPopulationSolution.first;
-
-            results.push_back(result);
-            printResults(result);
         }
+
+        GeneticMeasureResult result;
+        result.inversionMutation = geneticConfiguration.isInversionMutationEnabled();
+        result.constantMutation = true;
+        result.timeInSeconds = intervals.back();
+        result.relativeError = lowestCostRelativeError;
+        result.pathCost = lowestCost;
+        result.populationSize = bestPopulationSolution.first;
+
+        results.push_back(result);
+        printResults(result);
     }
 
-    for(auto interval = intervals.begin(); interval != intervals.end(); ++interval)
+    for(auto mutationCoefficient : mutationCoefficientsForTest)
     {
-        for(auto mutationCoefficient : mutationCoefficientsForTest)
+        int32_t lowestCost = INFINITY;
+        double lowestCostRelativeError = 0.0;
+
+        setGeneticConfig(useInversionMutation, mutationCoefficient,
+                                               crossoverCoefficientForTest,
+                                               geneticConfiguration.getReproductionCoefficient(), intervals.back(), bestPopulationSolution.first);
+
+        for(uint32_t counter = 0; counter < numberOfMeasurements; ++counter)
         {
-            int32_t lowestCost = INFINITY;
-            double lowestCostRelativeError = 0.0;
+            std::cout << "Pomiar ze stala krzyzowania " << crossoverCoefficientForTest << " dla " << bestPopulationSolution.first << " osobnikow, wartosc mutacji " << mutationCoefficient << ", czas " << static_cast<uint32_t>(intervals.back()) << "s (" << counter + 1 << " z " << numberOfMeasurements << ")..." << std::endl;
+            PathWithCost path = genetic.findBestPossibleRoute(*graph);
 
-            setGeneticConfig(useInversionMutation, mutationCoefficient,
-                                                   crossoverCoefficientForTest,
-                                                   geneticConfiguration.getReproductionCoefficient(), *interval, bestPopulationSolution.first);
-
-            for(uint32_t counter = 0; counter < numberOfMeasurements; ++counter)
+            if(isGivenPathPromising(path.first, lowestCost))
             {
-                std::cout << "Pomiar ze stala krzyzowania " << crossoverCoefficientForTest << " dla " << bestPopulationSolution.first << " osobnikow, wartosc mutacji " << mutationCoefficient << ", czas " << static_cast<uint32_t>(*interval) << "s (" << counter + 1 << " z " << numberOfMeasurements << ")..." << std::endl;
-                PathWithCost path = genetic.findBestPossibleRoute(*graph);
-
-                if(isGivenPathPromising(path.first, lowestCost))
-                {
-                    lowestCost = path.first;
-                    lowestCostRelativeError = calculateRelativeError(path.first);
-                }
+                lowestCost = path.first;
+                lowestCostRelativeError = calculateRelativeError(path.first);
             }
-
-            GeneticMeasureResult result;
-            result.inversionMutation = geneticConfiguration.isInversionMutationEnabled();
-            result.constantCrossover = true;
-            result.timeInSeconds = *interval;
-            result.relativeError = lowestCostRelativeError;
-            result.pathCost = lowestCost;
-            result.populationSize = bestPopulationSolution.first;
-
-            results.push_back(result);
-            printResults(result);
         }
+
+        GeneticMeasureResult result;
+        result.inversionMutation = geneticConfiguration.isInversionMutationEnabled();
+        result.constantCrossover = true;
+        result.timeInSeconds = intervals.back();
+        result.relativeError = lowestCostRelativeError;
+        result.pathCost = lowestCost;
+        result.populationSize = bestPopulationSolution.first;
+
+        results.push_back(result);
+        printResults(result);
     }
 }
 
@@ -234,7 +228,7 @@ void MeasureGenetic::saveResultsToFile()
 
 void MeasureGenetic::printResults(const GeneticMeasureResult& result)
 {
-    std::cout << "Wyniki dla " << result.populationSize << "osobnikow w czasie " << static_cast<uint32_t>(result.timeInSeconds) << "s:" << std::endl;
+    std::cout << "Wyniki dla " << result.populationSize << " osobnikow w czasie " << static_cast<uint32_t>(result.timeInSeconds) << "s:" << std::endl;
 
     std::cout << "\t- blad wzgledny: " << result.relativeError << "%" << std::endl;
     std::cout << "\t- koszt trasy: " << result.pathCost << std::endl << std::endl;
