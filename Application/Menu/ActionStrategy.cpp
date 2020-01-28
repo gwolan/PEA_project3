@@ -12,6 +12,7 @@
 #include <Application/Menu/Actions/ModifyGeneticConfiguration.hpp>
 #include <Application/Menu/Actions/PerformTabuSearch.hpp>
 #include <Application/Menu/Actions/PerformGeneticAlgorithm.hpp>
+#include <Application/Menu/Actions/MeasureGenetic.hpp>
 
 
 ActionStrategy::ActionStrategy(std::unique_ptr<GraphMatrix>& graphMatrix, TabuConfiguration& tabuConfig, GeneticConfiguration& geneticConfig)
@@ -90,6 +91,7 @@ bool ActionStrategy::selectAction(std::string choice)
         break;
         case 11:
         {
+            selectedAction = std::make_unique<MeasureGenetic>("Pomiary dla algorytmu genetycznego");
         }
         break;
         default:

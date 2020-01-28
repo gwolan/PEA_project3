@@ -23,6 +23,7 @@ class ModifyGeneticConfiguration : public BaseAction
     void setInversionMutation();
     void setMutationCoefficient();
     void setCrossoverCoefficient();
+    void setReproductionCoefficient();
     void setPopulationSize();
     void setGeneticInterval();
 

@@ -6,6 +6,7 @@ GeneticConfiguration::GeneticConfiguration()
     : inversionMutation(true)
     , mutationCoefficient(0.01)
     , crossoverCoefficient(0.8)
+    , reporoductionCoefficient(0.3)
     , geneticInterval(15.0)
     , populationSize(20)
 { }
@@ -35,6 +36,11 @@ void GeneticConfiguration::setCrossoverCoefficient(double crossoverCoeff)
     crossoverCoefficient = crossoverCoeff;
 }
 
+void GeneticConfiguration::setReproductionCoefficient(double reporoductionCoeff)
+{
+    reporoductionCoefficient = reporoductionCoeff;
+}
+
 void GeneticConfiguration::setPopulationSize(uint32_t population)
 {
     populationSize = population;
@@ -58,6 +64,11 @@ double GeneticConfiguration::getMutationCoefficient() const
 double GeneticConfiguration::getCrossoverCoefficient() const
 {
     return crossoverCoefficient;
+}
+
+double GeneticConfiguration::getReproductionCoefficient() const
+{
+    return reporoductionCoefficient;
 }
 
 uint32_t GeneticConfiguration::getPopulationSize() const

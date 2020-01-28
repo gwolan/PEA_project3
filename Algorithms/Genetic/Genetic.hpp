@@ -35,6 +35,7 @@ class Genetic
     void cutOffWeakPopulationMembers();
     bool shouldCrossoverHappen();
     bool shouldMutationHappen();
+    uint32_t getReproductorsCount();
     std::pair<PathWithCost, PathWithCost> generateSiblings(std::vector<uint32_t>& firstParent,
                                                            std::vector<uint32_t>& secondParent);
     void fillRestOfTheSiblingPathDuringOX(std::pair<std::vector<uint32_t>::iterator, std::vector<uint32_t>::iterator>& parentIterators,

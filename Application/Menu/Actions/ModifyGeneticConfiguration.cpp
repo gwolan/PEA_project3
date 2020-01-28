@@ -57,11 +57,17 @@ bool ModifyGeneticConfiguration::handleMenuSelection(std::string choice)
 
         case 4:
         {
-            setPopulationSize();
+            setCrossoverCoefficient();
         }
         break;
 
         case 5:
+        {
+            setPopulationSize();
+        }
+        break;
+
+        case 6:
         {
             setGeneticInterval();
         }
@@ -110,6 +116,16 @@ void ModifyGeneticConfiguration::setCrossoverCoefficient()
     geneticConfiguration.setCrossoverCoefficient(crossoverCoefficient);
 }
 
+void ModifyGeneticConfiguration::setReproductionCoefficient()
+{
+    double reporoductionCoefficient = 0.0;
+
+    std::cout << "Podaj % najlepszych osobnikow do rozmnozenia: ";
+    std::cin >> reporoductionCoefficient;
+
+    geneticConfiguration.setCrossoverCoefficient(reporoductionCoefficient);
+}
+
 void ModifyGeneticConfiguration::setPopulationSize()
 {
     uint32_t populationSize = 0;
@@ -136,8 +152,9 @@ void ModifyGeneticConfiguration::drawSubMenu()
     std::string optionOne(       "1. Zmien mutacje: " + std::string(geneticConfiguration.isInversionMutationEnabled() ? "Inversion Mutation\n" : "Scramble Mutation\n"));
     std::string optionTwo(       "2. Ustaw wspolczynnik mutacji: " + std::to_string(geneticConfiguration.getMutationCoefficient()) + " \n");
     std::string optionThree(     "3. Ustaw wspolczynnik krzyzowania: " + std::to_string(geneticConfiguration.getCrossoverCoefficient()) + std::string("\n"));
-    std::string optionFour(      "4. Ustaw wielkosc populacji: " + std::to_string(geneticConfiguration.getPopulationSize()) + std::string("\n"));
-    std::string optionFive(      "5. Ustaw czas zatrzymania algorytmu [s]: " + std::to_string(geneticConfiguration.getGeneticInterval()) + std::string("\n"));
+    std::string optionFour(      "4. Ustaw wspolczynnik reprodukcji: " + std::to_string(geneticConfiguration.getReproductionCoefficient()) + std::string("\n"));
+    std::string optionFive(      "5. Ustaw wielkosc populacji: " + std::to_string(geneticConfiguration.getPopulationSize()) + std::string("\n"));
+    std::string optionSix(      "6. Ustaw czas zatrzymania algorytmu [s]: " + std::to_string(geneticConfiguration.getGeneticInterval()) + std::string("\n"));
     std::string returnToMainMenu("0. Powrot do menu glownego\n");
     std::string selection(       "Wybor: ");
 
@@ -147,6 +164,7 @@ void ModifyGeneticConfiguration::drawSubMenu()
                                  optionThree +
                                  optionFour +
                                  optionFive +
+                                 optionSix +
                                  returnToMainMenu +
                                  selection);
 }

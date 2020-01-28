@@ -118,11 +118,17 @@ void Genetic::assignNewBestSolutionIfPossible(Genetic::PathWithCost& bestPath)
 
 void Genetic::breedCurrentPopulation(std::vector<Genetic::PathWithCost>& newGeneration)
 {
-    for(auto firstParent = population.begin(); firstParent != population.end(); ++firstParent)
+    // ranking selection
+    // reproduce only specified amount of best solutions
+    uint32_t reproductorsCount = getReproductorsCount();
+    auto endIterator = population.begin();
+    std::advance(endIterator, reproductorsCount + 1);
+
+    for(auto firstParent = population.begin(); firstParent != endIterator; ++firstParent)
     {
         if(shouldCrossoverHappen())
         {
-            for(auto secondParent = population.begin(); secondParent != population.end(); ++secondParent)
+            for(auto secondParent = population.begin(); secondParent != endIterator; ++secondParent)
             {
                 if(firstParent == secondParent)
                 {
@@ -140,6 +146,11 @@ void Genetic::breedCurrentPopulation(std::vector<Genetic::PathWithCost>& newGene
             }
         }
     }
+}
+
+uint32_t Genetic::getReproductorsCount()
+{
+    return static_cast<uint32_t>(static_cast<double>(population.size()) * geneticConfiguration.getReproductionCoefficient());
 }
 
 void Genetic::mutateNewGeneration(std::vector<Genetic::PathWithCost>& newGeneration)
